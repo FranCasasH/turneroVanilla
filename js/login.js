@@ -33,6 +33,27 @@ function login(e) {
     .catch((error) => {
       // Error en el login
       const errorMessage = error.message;
-      document.getElementById('error-message').textContent = errorMessage;
+      console.log(errorMessage);
+      switch (errorMessage) {
+        case 'Firebase: Error (auth/too-many-requests).':
+          document.getElementById('error-message').textContent = "Demasiados intentos. Intenta más tarde.";
+          break;
+          
+        case 'Firebase: Error (auth/user-not-found).':
+          document.getElementById('error-message').textContent = "El usuario no existe";
+          break;
+            
+        case 'Firebase: Error (auth/wrong-password).':
+          document.getElementById('error-message').textContent = "Contraseña incorrecta";
+          break;
+              
+        case 'Firebase: Error (auth/invalid-credential).':
+          document.getElementById('error-message').textContent = "Email o contraseña incorrectos";
+          break;
+
+        default:
+          document.getElementById('error-message').textContent = "Error desconocido. Intenta nuevamente.";
+          break;
+      }
     });
 }
