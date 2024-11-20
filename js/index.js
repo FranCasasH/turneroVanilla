@@ -41,10 +41,11 @@ function cargarDoctores() {
   const doctorSelect = document.getElementById('doctor');
   doctorSelect.innerHTML = '<option value="">Seleccione un doctor</option>';
 
-  const q = query(collection(db, "doctores"), where(`horarios.${diaSemana}`, "!=", null));
+  const q = query(collection(db, "doctores"), where(`horarios`, "!=", null));
   getDocs(q).then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
       const doctor = doc.data();
+      console.log(`Doctor encontrado: ${doctor.nombre}`);
       const option = document.createElement('option');
       option.value = doc.id;
       option.textContent = `${doctor.nombre} (${doctor.especialidad})`;
@@ -68,6 +69,7 @@ function cargarHorarios() {
     getDoc(doctorDocRef).then((docSnap) => {
       if (docSnap.exists()) {
         const doctor = docSnap.data();
+        console.log(`Horarios encontrados para el doctor: ${doctor.nombre}`);
         const horarios = doctor.horarios.filter(horario => horario.dia === diaSemana);
         horarios.forEach((horario) => {
           horario.horas.forEach((hora) => {
@@ -95,29 +97,41 @@ function agendarTurno(e) {
     const fecha = document.getElementById('fecha').value;
     const hora = document.getElementById('hora').value;
 
-    const q = query(collection(db, "turnos"), where("doctorId", "==", doctorId), where("fecha", "==", fecha), where("hora", "==", hora), where("estado", "==", "pendiente"));
-    getDocs(q).then((querySnapshot) => {
-      if (querySnapshot.empty) {
-        // No hay turnos en el mismo horario, se puede agendar
-        addDoc(collection(db, "turnos"), {
-          userId: user.uid,
-          doctorId: doctorId,
-          fecha: fecha,
-          hora: hora,
-          estado: "pendiente"
-        }).then(() => {
-          console.log("Turno agendado");
-          window.location.href = 'perfil.html';
+    const doctorDocRef = doc(db, "doctores", doctorId);
+    getDoc(doctorDocRef).then((docSnap) => {
+      if (docSnap.exists()) {
+        const doctor = docSnap.data();
+        const q = query(collection(db, "turnos"), where("doctorId", "==", doctorId), where("fecha", "==", fecha), where("hora", "==", hora), where("estado", "==", "pendiente"));
+        getDocs(q).then((querySnapshot) => {
+          if (querySnapshot.empty) {
+            // No hay turnos en el mismo horario, se puede agendar
+            addDoc(collection(db, "turnos"), {
+              userId: user.uid,
+              doctorId: doctorId,
+              doctor: doctor.nombre,
+              especialidad: doctor.especialidad,
+              fecha: fecha,
+              hora: hora,
+              estado: "pendiente"
+            }).then(() => {
+              console.log("Turno agendado");
+              window.location.href = 'perfil.html';
+            }).catch((error) => {
+              console.error("Error agendando turno: ", error);
+              document.getElementById('error-message').textContent = error.message;
+            });
+          } else {
+            // Ya hay un turno en el mismo horario
+            document.getElementById('error-message').textContent = "El horario seleccionado ya está ocupado.";
+          }
         }).catch((error) => {
-          console.error("Error agendando turno: ", error);
-          document.getElementById('error-message').textContent = error.message;
+          console.error("Error verificando turnos: ", error);
         });
       } else {
-        // Ya hay un turno en el mismo horario
-        document.getElementById('error-message').textContent = "El horario seleccionado ya está ocupado.";
+        console.log("No such document!");
       }
     }).catch((error) => {
-      console.error("Error verificando turnos: ", error);
+      console.error("Error getting document:", error);
     });
   }
 }
