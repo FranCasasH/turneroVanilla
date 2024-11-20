@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agendar Turno</title>
+  <script type="module" src="./js/index.js" defer></script>
+</head>
+<body>
+  <h1>Agendar Turno</h1>
+  <form id="turno-form">
+    <select id="doctor" required>
+      <option value="">Seleccione un doctor</option>
+    </select>
+    <input type="date" id="fecha" required>
+    <select id="hora" required>
+      <option value="">Seleccione una hora</option>
+    </select>
+    <button type="submit">Agendar Turno</button>
+  </form>
+  <p id="error-message"></p>
+</body>
+</html>

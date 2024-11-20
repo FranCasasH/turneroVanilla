@@ -55,7 +55,7 @@ function login(e) {
     .then((userCredential) => {
       // Login exitoso
       console.log('Login exitoso');
-      window.location.href = 'index.html'; // Redirigir a la página principal
+      window.location.href = 'perfil.html'; // Redirigir a la página principal
     })
     .catch((error) => {
       // Error en el login
