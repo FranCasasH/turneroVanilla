@@ -1,0 +1,44 @@
+:root{
+    --background:#cce2ea;
+    --pCem-1: #FF9900; 
+    --pCem-2: #FFC800;
+    --pCem-3: #FFE000;
+    --pCem-4: #FFC800;
+    --pCem-5: #B8F500;
+    --pCem-6: #1d6d19;
+    --pCem-7: #95E214;
+    --pCem-8: #015e01;
+    --pBermudez-c: #20BDB3;
+    --pBermudez-v: #AC0DA5;
+    --pSiem-n: #FE5E02;
+    --pSiem-a: #405262;
+  }
+.agendar{
+    padding-top: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+form{
+    margin-top: 10%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    border: solid 4px var(--pBermudez-c);
+    padding: 10%;
+}
+input, select, button{
+    margin: 10px;
+    background-color: transparent;
+    color: var(--pBermudez-c);
+    padding: 10px;
+    font-size: 15px;
+    border: solid 3px var(--pBermudez-c);
+    width: 80%;
+    outline: none;
+}
+h1{
+    font-size: 40px;
+    margin: 2% 0 2% 0;
+}
