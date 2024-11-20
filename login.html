@@ -20,8 +20,12 @@
   <main>
     <h2>Ingresar</h2>
     <form id="login-form" class="form">
-      <input type="email" id="email" placeholder="Email" required>
-      <input type="password" id="password" placeholder="Password" required>
+      <input type="text" id="email" placeholder="Email">
+      <p id="error-email" class="hidenMessage">asd</p>
+
+      <input type="password" id="password" placeholder="Password">
+      <p id="error-pass" class="hidenMessage">asd</p>
+
       <button type="submit">Ingresar</button>
     </form>
     <p id="error-message" class="errorMessage"></p>
