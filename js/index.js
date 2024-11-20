@@ -25,8 +25,9 @@ document.getElementById('doctor').addEventListener('change', cargarHorarios);
 onAuthStateChanged(auth, (user) => {
   if (user) {
     // User is signed in, load available doctors
-    cargarDoctores();
-    verificarYAgregarDoctores();
+    verificarYAgregarDoctores().then(() => {
+      cargarDoctores();
+    });
   } else {
     // No user is signed in, redirect to login
     window.location.href = 'login.html';
@@ -67,12 +68,14 @@ function cargarHorarios() {
     getDoc(doctorDocRef).then((docSnap) => {
       if (docSnap.exists()) {
         const doctor = docSnap.data();
-        const horarios = doctor.horarios[diaSemana] || [];
-        horarios.forEach((hora) => {
-          const option = document.createElement('option');
-          option.value = hora;
-          option.textContent = hora;
-          horaSelect.appendChild(option);
+        const horarios = doctor.horarios.filter(horario => horario.dia === diaSemana);
+        horarios.forEach((horario) => {
+          horario.horas.forEach((hora) => {
+            const option = document.createElement('option');
+            option.value = hora;
+            option.textContent = hora;
+            horaSelect.appendChild(option);
+          });
         });
       } else {
         console.log("No such document!");
@@ -124,6 +127,7 @@ async function verificarYAgregarDoctores() {
   const docSnap = await getDoc(docRef);
 
   if (!docSnap.exists()) {
+    console.log("Agregando doctores...");
     // Agregar doctores si no se han agregado antes
     await agregarDoctor("Andres Rodriguez", "Cardiología", generarHorariosAleatorios());
     await agregarDoctor("Jano Chiambretto", "Dermatología", generarHorariosAleatorios());
@@ -131,6 +135,9 @@ async function verificarYAgregarDoctores() {
 
     // Marcar como agregados
     await setDoc(docRef, { agregados: true });
+    console.log("Doctores agregados y marcado como agregados.");
+  } else {
+    console.log("Doctores ya han sido agregados anteriormente.");
   }
 }
 
@@ -141,7 +148,7 @@ async function agregarDoctor(nombre, especialidad, horarios) {
       especialidad: especialidad,
       horarios: horarios
     });
-    console.log("Doctor agregado con ID: ", docRef.id);
+    console.log(`Doctor ${nombre} agregado con ID: ${docRef.id}`);
   } catch (e) {
     console.error("Error agregando doctor: ", e);
   }
@@ -149,7 +156,7 @@ async function agregarDoctor(nombre, especialidad, horarios) {
 
 function generarHorariosAleatorios() {
   const dias = ["lunes", "martes", "miercoles", "jueves", "viernes"];
-  const horarios = {};
+  const horarios = [];
 
   dias.forEach(dia => {
     const horas = [];
@@ -158,7 +165,7 @@ function generarHorariosAleatorios() {
       const hora = `${Math.floor(Math.random() * 8) + 9}:00`; // Genera horas entre 9:00 y 16:00
       horas.push(hora);
     }
-    horarios[dia] = horas;
+    horarios.push({ dia: dia, horas: horas });
   });
 
   return horarios;
