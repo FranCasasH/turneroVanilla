@@ -79,11 +79,11 @@ function loadTurnos(userId) {
       const turno = doc.data();
       const div = document.createElement('div');
       div.innerHTML = `
-        <p>Doctor: ${turno.doctor}</p>
-        <p>Especialidad: ${turno.especialidad}</p>
-        <p>Fecha: ${turno.fecha}</p>
-        <p>Hora: ${turno.hora}</p>
-        <p>Estado: ${turno.estado}</p>
+        <p>${turno.doctor}</p>
+        <p>${turno.especialidad}</p>
+        <p>${turno.fecha}</p>
+        <p>${turno.hora}</p>
+        <p>${turno.estado}</p>
         <button onclick="cancelarTurno('${doc.id}')">Cancelar Turno</button>
       `;
       turnosList.appendChild(div);
