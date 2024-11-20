@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfil</title>
+  <script type="module" src="./js/perfil.js" defer></script>
+</head>
+<body>
+  <h1>Perfil del Usuario</h1>
+  <form id="perfil-form">
+    <input type="text" id="nombre" placeholder="Nombre" required>
+    <input type="text" id="apellido" placeholder="Apellido" required>
+    <input type="number" id="edad" placeholder="Edad" required>
+    <button type="submit">Guardar</button>
+  </form>
+  <button id="agendar-turno">Agendar Turno</button>
+  <h2>Turnos Agendados</h2>
+  <div id="turnos-list"></div>
+  <p id="error-message"></p>
+</body>
+</html>
